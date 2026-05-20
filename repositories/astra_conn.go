@@ -1,10 +1,8 @@
 package repositories
 
 import (
-	"fmt"
-	"path/filepath"
 	astradb "github.com/datastax/astra-db-go"
-    "github.com/datastax/astra-db-go/options"
+	"github.com/datastax/astra-db-go/options"
 )
 
 type AstraConfig struct {
@@ -13,14 +11,14 @@ type AstraConfig struct {
 	Endpoint string
 }
 
-func NewAstraSession(cfg AstraConfig) (*apachegocql.Session, error) {
+func NewAstraSession(cfg AstraConfig) (*astradb.Db, error) {
 
 	client := astradb.NewClient(
-		options.WithToken(cfg.Token)
-		options.WithKeyspace(cfg.Keyspace)
+		options.WithToken(cfg.Token),
+		options.WithKeyspace(cfg.Keyspace),
 	)
 
 	db := client.Database(cfg.Endpoint)
 
-	return db
+	return db, nil
 }

@@ -1,12 +1,12 @@
 package models
 
 import (
-	astradb "github.com/datastax/astra-db-go"
+	astratypes "github.com/datastax/astra-db-go/datatypes"
 )
 
 type UserCredentials struct {
 	Email         string
 	Password      string
-	Userid        astradb.timeuuid
+	Userid        astratypes.UUID
 	AccountLocked bool
 }
