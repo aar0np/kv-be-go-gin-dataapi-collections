@@ -42,7 +42,7 @@ func (r *AuthDAL) GetUserById(id astratypes.UUID) (*models.User, error) {
 		LastName:      dbuser.LastName,
 		AccountStatus: dbuser.AccountStatus,
 		CreatedDate:   dbuser.CreatedDate,
-		//LastLoginDate: dbuser.LastLoginDate,
+		LastLoginDate: dbuser.LastLoginDate,
 	}
 
 	return user, nil

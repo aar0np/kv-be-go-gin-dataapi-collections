@@ -31,7 +31,7 @@ func main() {
 	authController := controllers.NewAuthController(db, baseCtx)
 	healthController := controllers.NewHealthController()
 	//ratingsController := controllers.NewRatingsController(db, baseCtx)
-	//videoController := controllers.NewVideoController(db, baseCtx)
+	videoController := controllers.NewVideoController(db, baseCtx)
 
 	// route definitions
 	router := gin.Default()
@@ -48,17 +48,17 @@ func main() {
 			auth.GET("/me", authController.GetCurrentUser)
 			auth.GET(":id", authController.GetUser)
 		}
-		//		videos := api.Group("/videos")
-		//		{
-		//			videos.GET("/id/:id", videoController.GetVideo)
-		//			videos.POST("", videoController.SubmitVideo)
-		//			videos.GET("/latest", videoController.GetLatestVideos)
-		//			videos.GET("/id/:id/related", videoController.GetSimilarVideos)
-		//			videos.GET("/:id/ratings", ratingsController.GetRatingsByVideoId)
-		//			videos.POST("/id/:id/view", videoController.RecordVideoView)
-		//			videos.GET("/:id/comments", videoController.GetComments)
-		//			videos.POST("/:id/comments", videoController.SubmitComment)
-		//		}
+		videos := api.Group("/videos")
+		{
+			videos.GET("/id/:id", videoController.GetVideo)
+			videos.POST("", videoController.SubmitVideo)
+			videos.GET("/latest", videoController.GetLatestVideos)
+			videos.GET("/id/:id/related", videoController.GetSimilarVideos)
+			//			videos.GET("/:id/ratings", ratingsController.GetRatingsByVideoId)
+			//			videos.POST("/id/:id/view", videoController.RecordVideoView)
+			videos.GET("/:id/comments", videoController.GetComments)
+			//			videos.POST("/:id/comments", videoController.SubmitComment)
+		}
 	}
 
 	router.RunTLS("localhost:8443", "localhost.pem", "localhost-key.pem")
