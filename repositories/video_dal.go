@@ -29,11 +29,15 @@ func NewVideoDAL(db *astradb.Db, ctx context.Context) *VideoDAL {
 func (r *VideoDAL) GetVideo(id astratypes.UUID) (*models.Video, error) {
 	collection := r.DB.Collection("videos")
 
-	video := &models.Video{Videoid: id}
+	video := &models.Video{}
 
-	err1 := collection.FindOne(r.Ctx, filter.Eq("videoid", id)).Decode(&video)
+	err1 := collection.FindOne(r.Ctx, filter.Eq("videoid", id.String())).Decode(&video)
 	if err1 != nil {
 		return nil, fmt.Errorf("query has failed: %w", err1)
+	}
+
+	if video == nil {
+		return nil, fmt.Errorf("video not found")
 	}
 
 	return video, nil
@@ -76,7 +80,7 @@ func (r *VideoDAL) GetLatestVideosToday(day time.Time, limit int) (*[]models.Vid
 func (r *VideoDAL) GetLatestVideos(limit int) (*[]models.Video, error) {
 	collection := r.DB.Collection("videos")
 
-	cursor := collection.Find(nil, options.CollectionFind().SetSort(sort.Desc("added_date")).SetLimit(limit))
+	cursor := collection.Find(filter.F{}, options.CollectionFind().SetSort(sort.Desc("added_date")).SetLimit(limit))
 	defer cursor.Close()
 
 	var videos []models.Video
@@ -91,7 +95,7 @@ func (r *VideoDAL) GetLatestVideos(limit int) (*[]models.Video, error) {
 func (r *VideoDAL) GetVideosByVector(vector [384]float32, limit int) (*[]models.Video, error) {
 	collection := r.DB.Collection("videos")
 
-	cursor := collection.Find(nil, options.CollectionFind().SetSort(sort.Vector(vector)).SetLimit(limit))
+	cursor := collection.Find(filter.F{}, options.CollectionFind().SetSort(sort.Vector(vector)).SetLimit(limit))
 	defer cursor.Close()
 
 	var videos []models.Video

@@ -52,16 +52,16 @@ func NewVideoController(db *astradb.Db, ctx context.Context) *VideoController {
 func (vc *VideoController) GetVideo(c *gin.Context) {
 	id, err1 := astratypes.ParseUUID(c.Param("id"))
 	if err1 != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err1.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error1": err1.Error()})
 	}
 
 	video, err2 := vc.videoDAL.GetVideo(id)
 	if err2 != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err2.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error2": err2.Error()})
 	}
 
 	// make sure that we have a YouTubeID
-	if video.YouTubeId == "" {
+	if video != nil && video.YouTubeId == "" {
 		video.YouTubeId = extractYouTubeId(video.Location)
 		vc.videoDAL.UpdateYoutubeId(id, video.YouTubeId)
 	}
@@ -173,7 +173,7 @@ func (vc *VideoController) GetLatestVideos(c *gin.Context) {
 	latestVideos, err3 := vc.videoDAL.GetLatestVideosToday(today, pageSize)
 
 	if err3 != nil {
-		fmt.Println(err3)
+		fmt.Println("error3: ", err3)
 	}
 
 	if latestVideos != nil && len(*latestVideos) < pageSize {
@@ -181,7 +181,7 @@ func (vc *VideoController) GetLatestVideos(c *gin.Context) {
 		additionalVideos, err4 := vc.videoDAL.GetLatestVideos(newLimit)
 
 		if err4 != nil {
-			fmt.Println(err4)
+			fmt.Println("error4: ", err4)
 		}
 
 		*latestVideos = append(*latestVideos, *additionalVideos...)
@@ -193,7 +193,7 @@ func (vc *VideoController) GetLatestVideos(c *gin.Context) {
 		// get ratings
 		rating, err5 := vc.ratingsDAL.GetSingleRating(lVideo.Videoid)
 		if err5 != nil {
-			fmt.Println(err5)
+			fmt.Println("error5: ", err5)
 		}
 
 		if rating == nil {

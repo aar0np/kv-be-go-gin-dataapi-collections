@@ -7,14 +7,14 @@ import (
 )
 
 type Video struct {
-	Videoid              astratypes.UUID `json:"videoId"`
-	Userid               astratypes.UUID `json:"userId"`
-	Name                 string          `json:"title"`
+	Videoid              astratypes.UUID `json:"videoid"`
+	Userid               astratypes.UUID `json:"userid"`
+	Name                 string          `json:"name"`
 	Description          string          `json:"description"`
 	Location             string          `json:"location"`
-	PreviewImageLocation string          `json:"thumbnailUrl"`
-	ContentFeatures      [384]float32    `json:"contentFeatures"`
-	AddedDate            time.Time       `json:"submittedAt"`
+	PreviewImageLocation string          `json:"preview_image_location"`
+	ContentFeatures      [384]float32    `json:"content_features"`
+	AddedDate            time.Time       `json:"added_date"`
 	Views                int             `json:"views"`
 	Score                float32         `json:"averageRating"`
 	YouTubeId            string          `json:"youtubeVideoId"`
