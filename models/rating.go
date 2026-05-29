@@ -3,7 +3,7 @@ package models
 import (
 	"time"
 
-	astratypes "github.com/datastax/astra-db-go/datatypes"
+	astratypes "github.com/datastax/astra-db-go/astra/datatypes"
 )
 
 type Rating struct {

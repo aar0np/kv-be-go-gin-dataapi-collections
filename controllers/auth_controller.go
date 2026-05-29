@@ -9,8 +9,8 @@ import (
 	"os"
 	"time"
 
-	astradb "github.com/datastax/astra-db-go"
-	astratypes "github.com/datastax/astra-db-go/datatypes"
+	"github.com/datastax/astra-db-go/astra"
+	astratypes "github.com/datastax/astra-db-go/astra/datatypes"
 	"github.com/google/uuid"
 
 	"github.com/gin-gonic/gin"
@@ -34,7 +34,7 @@ type AuthController struct {
 	authDAL repo.AuthDAL
 }
 
-func NewAuthController(db *astradb.Db, ctx context.Context) *AuthController {
+func NewAuthController(db *astra.Db, ctx context.Context) *AuthController {
 	return &AuthController{
 		authDAL: *repo.NewAuthDAL(db, ctx),
 	}
@@ -52,7 +52,7 @@ func (ac *AuthController) Register(c *gin.Context) {
 	var jwtResp models.JwtResponse
 
 	// generate userid
-	var newUserId = astratypes.NewUUID()
+	var newUserId = astratypes.NewUUID().String()
 
 	// generate user
 	user.Email = newUserReg.Email
@@ -69,14 +69,14 @@ func (ac *AuthController) Register(c *gin.Context) {
 	//ac.authDAL.SaveUserCreds(creds)
 
 	// gen token
-	token, err3 := issueToken(newUserId.String(), newUserReg.Email)
+	token, err3 := issueToken(newUserId, newUserReg.Email)
 	if err3 != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err3.Error()})
 		return
 	}
 
 	jwtResp.Email = newUserReg.Email
-	jwtResp.UserID = newUserId.String()
+	jwtResp.UserID = newUserId
 	jwtResp.Token = token.Access
 
 	c.JSON(http.StatusOK, jwtResp)
@@ -103,29 +103,25 @@ func (ac *AuthController) Login(c *gin.Context) {
 	}
 
 	id := user.Userid
-	token, err3 := issueToken(id.String(), req.Email)
+	token, err3 := issueToken(id, req.Email)
 	if err3 != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error3": err3.Error()})
 		return
 	}
 
 	// register login with database
-	ac.authDAL.RegisterLogin(id.String())
+	ac.authDAL.RegisterLogin(id)
 
 	var jwtResp models.JwtResponse
 	jwtResp.Email = req.Email
-	jwtResp.UserID = id.String()
+	jwtResp.UserID = id
 	jwtResp.Token = token.Access
 
 	c.JSON(http.StatusOK, jwtResp)
 }
 
 func (ac *AuthController) GetUser(c *gin.Context) {
-	id, err1 := astratypes.ParseUUID(c.Param("id"))
-
-	if err1 != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err1.Error()})
-	}
+	id := c.Param("id")
 
 	user, err2 := ac.authDAL.GetUserById(id)
 	if err2 != nil {
@@ -229,11 +225,11 @@ func (ac *AuthController) UpdateCurrentUser(c *gin.Context) {
 	}
 }
 
-func getUserIdFromToken(c *gin.Context) (astratypes.UUID, error) {
+func getUserIdFromToken(c *gin.Context) (string, error) {
 	// Get token from Authorization header
 	authHeader := c.GetHeader("Authorization")
 	if authHeader == "" {
-		return astratypes.NewUUID(), errors.New("authorization header is required")
+		return astratypes.NewUUID().String(), errors.New("authorization header is required")
 	}
 
 	// Extract token from "Bearer <token>" format
@@ -244,12 +240,13 @@ func getUserIdFromToken(c *gin.Context) (astratypes.UUID, error) {
 
 	claims, err1 := parseWithSecret(token)
 	if err1 != nil {
-		return astratypes.NewUUID(), err1
+		return astratypes.NewUUID().String(), err1
 	}
 
 	// get UserID from Subject
-	uuid, err2 := astratypes.ParseUUID(claims.Subject)
-	return uuid, err2
+	//uuid, err2 := astratypes.ParseUUID(claims.Subject)
+	//return uuid, err2
+	return claims.Subject, nil
 }
 
 func validatePassword(password string, hashedPassword string) bool {

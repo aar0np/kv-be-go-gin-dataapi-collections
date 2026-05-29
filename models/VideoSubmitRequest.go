@@ -1,6 +1,6 @@
 package models
 
-import astratypes "github.com/datastax/astra-db-go/datatypes"
+import astratypes "github.com/datastax/astra-db-go/astra/datatypes"
 
 type VideoSubmitRequest struct {
 	YouTubeUrl  string          `json:"youtubeUrl"`

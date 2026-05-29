@@ -6,26 +6,24 @@ import (
 	"killrvideo/go-backend-astra-dataapi/models"
 	"time"
 
-	astradb "github.com/datastax/astra-db-go"
-	astratypes "github.com/datastax/astra-db-go/datatypes"
-
-	"github.com/datastax/astra-db-go/filter"
-	"github.com/datastax/astra-db-go/update"
+	"github.com/datastax/astra-db-go/astra"
+	"github.com/datastax/astra-db-go/astra/filter"
+	"github.com/datastax/astra-db-go/astra/update"
 )
 
 type AuthDAL struct {
-	DB  *astradb.Db
+	DB  *astra.Db
 	Ctx context.Context
 }
 
-func NewAuthDAL(db *astradb.Db, ctx context.Context) *AuthDAL {
+func NewAuthDAL(db *astra.Db, ctx context.Context) *AuthDAL {
 	return &AuthDAL{
 		DB:  db,
 		Ctx: ctx,
 	}
 }
 
-func (r *AuthDAL) GetUserById(id astratypes.UUID) (*models.User, error) {
+func (r *AuthDAL) GetUserById(id string) (*models.User, error) {
 	collection := r.DB.Collection("users")
 
 	var dbuser models.DBUser

@@ -10,6 +10,8 @@ github.com/datastax/astra-db-go v0.0.0-20260512225649-c0021c3d7d9a h1:L0BqtQdvwd
 github.com/datastax/astra-db-go v0.0.0-20260512225649-c0021c3d7d9a/go.mod h1:AqweeG0ttvFEdwVBhcDVd1x7/sJiPSnWOlpYRzYZ02k=
 github.com/datastax/astra-db-go v0.0.0-20260527082440-5fd97c4ffd40 h1:zAUbLhzB4SR/VSkWun7u5UjMjrHplgOwkoBtfRRuQvU=
 github.com/datastax/astra-db-go v0.0.0-20260527082440-5fd97c4ffd40/go.mod h1:AqweeG0ttvFEdwVBhcDVd1x7/sJiPSnWOlpYRzYZ02k=
+github.com/datastax/astra-db-go v0.0.0-20260529101717-17a7d9a1ac28 h1:9ZI1KTofO6gTASzyr7gCDTcZ6NraMyv6la120JyBX4s=
+github.com/datastax/astra-db-go v0.0.0-20260529101717-17a7d9a1ac28/go.mod h1:AqweeG0ttvFEdwVBhcDVd1x7/sJiPSnWOlpYRzYZ02k=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

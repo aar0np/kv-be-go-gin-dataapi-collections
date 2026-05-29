@@ -1,8 +1,8 @@
 package repositories
 
 import (
-	astradb "github.com/datastax/astra-db-go"
-	"github.com/datastax/astra-db-go/options"
+	"github.com/datastax/astra-db-go/astra"
+	"github.com/datastax/astra-db-go/astra/options"
 )
 
 type AstraConfig struct {
@@ -11,11 +11,11 @@ type AstraConfig struct {
 	Endpoint string
 }
 
-func NewAstraSession(cfg AstraConfig) (*astradb.Db, error) {
+func NewAstraSession(cfg AstraConfig) (*astra.Db, error) {
 
-	client := astradb.NewClient(
-		options.WithToken(cfg.Token),
-		options.WithKeyspace(cfg.Keyspace),
+	client := astra.NewClient(
+		options.API().SetToken(cfg.Token),
+		options.API().SetKeyspace(cfg.Keyspace),
 	)
 
 	db := client.Database(cfg.Endpoint)

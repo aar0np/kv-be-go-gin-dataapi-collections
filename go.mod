@@ -3,7 +3,7 @@ module killrvideo/go-backend-astra-dataapi
 go 1.26.3
 
 require (
-	github.com/datastax/astra-db-go v0.0.0-20260527082440-5fd97c4ffd40
+	github.com/datastax/astra-db-go v0.0.0-20260529101717-17a7d9a1ac28
 	github.com/gin-gonic/gin v1.12.0
 )
 

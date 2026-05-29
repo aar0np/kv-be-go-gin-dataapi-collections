@@ -4,25 +4,24 @@ import (
 	"context"
 	"killrvideo/go-backend-astra-dataapi/models"
 
-	astradb "github.com/datastax/astra-db-go"
-	astratypes "github.com/datastax/astra-db-go/datatypes"
-	"github.com/datastax/astra-db-go/filter"
-	"github.com/datastax/astra-db-go/options"
+	"github.com/datastax/astra-db-go/astra"
+	"github.com/datastax/astra-db-go/astra/filter"
+	"github.com/datastax/astra-db-go/astra/options"
 )
 
 type CommentDAL struct {
-	DB  *astradb.Db
+	DB  *astra.Db
 	Ctx context.Context
 }
 
-func NewCommentDAL(db *astradb.Db, ctx context.Context) *CommentDAL {
+func NewCommentDAL(db *astra.Db, ctx context.Context) *CommentDAL {
 	return &CommentDAL{
 		DB:  db,
 		Ctx: ctx,
 	}
 }
 
-func (c *CommentDAL) GetCommentsByVideoId(videoid astratypes.UUID, pageSize int) (*[]models.Comment, error) {
+func (c *CommentDAL) GetCommentsByVideoId(videoid string, pageSize int) (*[]models.Comment, error) {
 	collection := c.DB.Collection("comments")
 
 	cursor := collection.Find(filter.Eq("videoid", videoid), options.CollectionFind().SetLimit(pageSize))

@@ -5,24 +5,23 @@ import (
 	"killrvideo/go-backend-astra-dataapi/models"
 	"strconv"
 
-	astradb "github.com/datastax/astra-db-go"
-	astratypes "github.com/datastax/astra-db-go/datatypes"
-	"github.com/datastax/astra-db-go/filter"
+	"github.com/datastax/astra-db-go/astra"
+	"github.com/datastax/astra-db-go/astra/filter"
 )
 
 type RatingsDAL struct {
-	DB  *astradb.Db
+	DB  *astra.Db
 	Ctx context.Context
 }
 
-func NewRatingsDAL(db *astradb.Db, ctx context.Context) *RatingsDAL {
+func NewRatingsDAL(db *astra.Db, ctx context.Context) *RatingsDAL {
 	return &RatingsDAL{
 		DB:  db,
 		Ctx: ctx,
 	}
 }
 
-func (r *RatingsDAL) GetSingleRating(videoid astratypes.UUID) (*models.Rating, error) {
+func (r *RatingsDAL) GetSingleRating(videoid string) (*models.Rating, error) {
 	collection := r.DB.Collection("video_ratings")
 
 	cursor := collection.Find(filter.Eq("videoid", videoid))
